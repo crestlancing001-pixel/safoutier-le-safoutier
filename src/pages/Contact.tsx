@@ -87,6 +87,12 @@ const Contact = () => {
       toast.success("Message received. We will reply within 24 hours.");
       form.reset();
       setSubject("");
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        const first = form.querySelector<HTMLElement>('[name="name"]');
+        first?.focus();
+      }, 2200);
     } finally {
       setIsSubmitting(false);
     }
