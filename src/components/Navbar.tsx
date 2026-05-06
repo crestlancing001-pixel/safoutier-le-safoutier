@@ -7,8 +7,7 @@ import { cn } from "@/lib/utils";
 const links = [
   { to: "/", label: "Home" },
   { to: "/menu", label: "Menu" },
-  { to: "/reservations", label: "Reservations" },
-  { to: "/contact", label: "Contact" },
+  { to: "/contact", label: "Contact Us" },
 ];
 
 export const Navbar = () => {
@@ -29,14 +28,12 @@ export const Navbar = () => {
     <header
       className={cn(
         "fixed top-0 inset-x-0 z-40 transition-all duration-300",
-        scrolled || open
-          ? "bg-background/90 backdrop-blur-md border-b border-border/60"
-          : "bg-transparent"
+        scrolled || open ? "bg-surface2/95 backdrop-blur-md border-b border-foreground/10" : "bg-transparent",
       )}
     >
       <div className="container-x flex items-center justify-between h-20">
-        <Link to="/" className="font-display text-2xl md:text-3xl text-primary tracking-wide">
-          Le Safoutier
+        <Link to="/" className="font-body text-base md:text-lg font-bold uppercase tracking-[0.15em] text-foreground">
+          LE SAFOUTIER
         </Link>
 
         <nav className="hidden md:flex items-center gap-10">
@@ -47,10 +44,8 @@ export const Navbar = () => {
               end={l.to === "/"}
               className={({ isActive }) =>
                 cn(
-                  "text-sm uppercase tracking-[0.18em] transition-colors",
-                  isActive
-                    ? "text-primary"
-                    : "text-foreground/80 hover:text-primary"
+                  "text-sm font-medium transition-colors",
+                  isActive ? "text-primary" : "text-foreground/85 hover:text-primary",
                 )
               }
             >
@@ -60,8 +55,8 @@ export const Navbar = () => {
         </nav>
 
         <div className="hidden md:block">
-          <Button asChild variant="terracotta" size="lg">
-            <Link to="/reservations">Reserve a Table</Link>
+          <Button asChild size="default">
+            <Link to="/reservations">Book Online</Link>
           </Button>
         </div>
 
@@ -75,25 +70,22 @@ export const Navbar = () => {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border/60 bg-background/95 backdrop-blur-md animate-fade-in">
-          <nav className="container-x py-6 flex flex-col gap-5">
+        <div className="md:hidden fixed inset-0 top-20 bg-surface2 animate-fade-in">
+          <nav className="container-x py-10 flex flex-col gap-7">
             {links.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 end={l.to === "/"}
                 className={({ isActive }) =>
-                  cn(
-                    "text-base uppercase tracking-[0.18em]",
-                    isActive ? "text-primary" : "text-foreground/85"
-                  )
+                  cn("text-2xl font-bold uppercase tracking-wide", isActive ? "text-primary" : "text-foreground")
                 }
               >
                 {l.label}
               </NavLink>
             ))}
-            <Button asChild variant="terracotta" size="lg" className="mt-2">
-              <Link to="/reservations">Reserve a Table</Link>
+            <Button asChild size="lg" className="mt-4 w-full">
+              <Link to="/reservations">Book Online</Link>
             </Button>
           </nav>
         </div>

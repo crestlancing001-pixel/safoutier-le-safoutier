@@ -17,7 +17,7 @@ export const FloatingButtons = () => {
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Back to top"
-          className="w-11 h-11 rounded-full bg-surface2 border border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center shadow-lg animate-fade-in"
+          className="w-12 h-12 rounded-full bg-primary text-primary-foreground hover:brightness-110 transition-all flex items-center justify-center shadow-lg animate-fade-in"
         >
           <ArrowUp className="w-5 h-5" />
         </button>
@@ -27,7 +27,7 @@ export const FloatingButtons = () => {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="pulse-ring relative w-14 h-14 rounded-full bg-primary text-primary-foreground hover:bg-primary-hover transition-colors flex items-center justify-center shadow-xl"
+        className="pulse-ring relative w-14 h-14 rounded-full bg-whatsapp text-whatsapp-foreground hover:brightness-110 transition-all flex items-center justify-center shadow-xl"
       >
         <MessageCircle className="w-6 h-6" />
       </a>

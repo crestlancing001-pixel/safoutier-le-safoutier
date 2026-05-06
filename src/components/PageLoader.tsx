@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import { SafouLeaf } from "./SafouLeaf";
 
 export const PageLoader = () => {
   const [gone, setGone] = useState(false);
+  const [fading, setFading] = useState(false);
   useEffect(() => {
-    const t = setTimeout(() => setGone(true), 1900);
-    return () => clearTimeout(t);
+    const f = setTimeout(() => setFading(true), 1100);
+    const t = setTimeout(() => setGone(true), 1600);
+    return () => { clearTimeout(f); clearTimeout(t); };
   }, []);
   if (gone) return null;
   return (
-    <div className="fixed inset-0 z-[100] bg-background flex items-center justify-center animate-leaf-out pointer-events-none">
-      <div className="flex flex-col items-center gap-4">
-        <SafouLeaf className="w-16 h-16 text-primary animate-pulse" />
-        <p className="font-accent italic text-primary text-xl">Le Safoutier</p>
-      </div>
+    <div
+      className={`fixed inset-0 z-[100] bg-surface2 flex items-center justify-center transition-opacity duration-500 pointer-events-none ${
+        fading ? "opacity-0" : "opacity-100"
+      }`}
+    >
+      <p className="font-body text-3xl md:text-5xl font-black uppercase tracking-[0.15em] text-primary">
+        LE SAFOUTIER
+      </p>
     </div>
   );
 };
