@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LeafDivider } from "@/components/SafouLeaf";
 
 const HERO = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=2000&q=80";
 
@@ -83,8 +86,30 @@ const tabs: { key: string; label: string; badge: string; items: Item[] }[] = [
 ];
 
 const Menu = () => {
-  const [active, setActive] = useState(tabs[0].key);
-  const current = tabs.find((t) => t.key === active)!;
+  const [active, setActive] = useState<string>("all");
+  const [query, setQuery] = useState("");
+
+  const navTabs = useMemo(
+    () => [{ key: "all", label: "All" }, ...tabs.map((t) => ({ key: t.key, label: t.label }))],
+    [],
+  );
+
+  const visibleSections = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return tabs
+      .filter((t) => active === "all" || t.key === active)
+      .map((t) => ({
+        ...t,
+        items: q
+          ? t.items.filter(
+              (i) => i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q),
+            )
+          : t.items,
+      }))
+      .filter((t) => t.items.length > 0);
+  }, [active, query]);
+
+  const totalResults = visibleSections.reduce((n, s) => n + s.items.length, 0);
 
   return (
     <>
@@ -105,46 +130,101 @@ const Menu = () => {
         </div>
       </section>
 
-      {/* TAB NAV */}
-      <section className="bg-surface2 py-8 sticky top-20 z-30 border-b border-foreground/10">
-        <div className="container-x flex flex-wrap justify-center gap-3">
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setActive(t.key)}
-              className={`px-5 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-[0.05em] transition-all border ${
-                active === t.key
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-transparent text-foreground/85 border-foreground/20 hover:border-primary hover:text-primary"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+      {/* TAB NAV + SEARCH */}
+      <section className="bg-surface2 py-6 sticky top-20 z-30 border-b border-foreground/10">
+        <div className="container-x flex flex-col gap-5">
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {navTabs.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setActive(t.key)}
+                className={`px-4 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-[0.05em] transition-all border ${
+                  active === t.key
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-transparent text-foreground/85 border-foreground/20 hover:border-primary hover:text-primary"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="relative max-w-xl w-full mx-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+            <Input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search dishes, ingredients…"
+              aria-label="Search the menu"
+              className="h-12 pl-11 pr-11 rounded-full bg-background border-foreground/15 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-muted-foreground hover:text-primary"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* GRID */}
-      <section className="bg-background py-16 md:py-24">
+      {/* SECTIONS */}
+      <section className="bg-background py-16 md:py-20">
         <div className="container-x">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-            {current.items.map((item) => (
-              <article
-                key={item.name}
-                className="group animate-fade-up"
-              >
-                <div className="rounded-xl overflow-hidden mb-5" style={{ height: 280 }}>
-                  <img
-                    src={item.img}
-                    alt={item.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+          {visibleSections.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-xl font-semibold text-foreground mb-2">No dishes found</p>
+              <p className="text-muted-foreground">
+                Try a different search or category.
+              </p>
+            </div>
+          ) : (
+            visibleSections.map((section, idx) => (
+              <div key={section.key} className="animate-fade-up">
+                {idx > 0 && <LeafDivider className="my-16 md:my-20" />}
+
+                <div className="text-center mb-10 md:mb-14">
+                  <span className="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-[0.15em] text-primary border border-primary/40 rounded-full mb-4">
+                    {section.badge}
+                  </span>
+                  <h2
+                    className="font-body font-black uppercase text-foreground leading-[0.95] tracking-tight"
+                    style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)" }}
+                  >
+                    {section.label}
+                  </h2>
                 </div>
-                <h3 className="text-[22px] font-bold text-foreground mb-2">{item.name}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{item.desc}</p>
-              </article>
-            ))}
-          </div>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                  {section.items.map((item) => (
+                    <article key={item.name} className="group">
+                      <div className="rounded-xl overflow-hidden mb-5 h-[260px]">
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                      <h3 className="text-[22px] font-bold text-foreground mb-2">{item.name}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{item.desc}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+
+          {query && totalResults > 0 && (
+            <p className="text-center text-sm text-muted-foreground mt-12">
+              {totalResults} result{totalResults === 1 ? "" : "s"} for “{query}”
+            </p>
+          )}
         </div>
       </section>
 
