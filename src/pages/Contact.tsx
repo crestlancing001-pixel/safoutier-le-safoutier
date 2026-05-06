@@ -226,8 +226,10 @@ const Contact = () => {
                 />
                 {errors.message && <p id="message-error" className={errClass}>{errors.message}</p>}
               </div>
-              <Button type="submit" variant="terracotta" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Sending…" : "Send Message"}
+              <Button type="submit" variant="terracotta" size="lg" className="w-full" disabled={isSubmitting || isSuccess} aria-live="polite">
+                {isSuccess ? (
+                  <span className="inline-flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Message Sent</span>
+                ) : isSubmitting ? "Sending…" : "Send Message"}
               </Button>
             </form>
           </div>
