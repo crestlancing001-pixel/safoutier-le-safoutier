@@ -42,6 +42,7 @@ const Contact = () => {
   const [subject, setSubject] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const validateField = (field: string, value: unknown) => {
     const partial = { name: "", email: "", subject: "", message: "", [field]: value };
