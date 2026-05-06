@@ -4,97 +4,79 @@
 
 @layer base {
   :root {
-    /* Le Safoutier brand tokens — all HSL */
-    --background: 22 60% 7%;          /* #1C0F07 deep espresso */
-    --foreground: 38 50% 92%;
+    /* Le Safoutier — Resto Kayang inspired */
+    --background: 0 0% 10%;            /* #1A1A1A */
+    --foreground: 0 0% 100%;           /* #FFFFFF */
 
-    --surface-2: 24 53% 12%;          /* #2C1A0E */
-    --cream: 38 60% 93%;              /* #F7F0E3 */
-    --cream-foreground: 22 60% 12%;
+    --surface-2: 0 0% 7%;              /* #111111 deeper black */
 
-    --card: 22 56% 9%;                /* #241409 */
-    --card-foreground: 38 50% 92%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 22 56% 9%;
-    --popover-foreground: 38 50% 92%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 43 60% 56%;            /* #D4A847 gold */
-    --primary-foreground: 22 60% 7%;
-    --primary-hover: 41 73% 64%;      /* #E8C060 */
+    --primary: 50 100% 48%;            /* #F5C800 yellow */
+    --primary-foreground: 0 0% 7%;     /* #111111 */
+    --primary-hover: 50 100% 55%;
 
-    --secondary: 24 53% 12%;
-    --secondary-foreground: 38 50% 92%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 24 30% 18%;
-    --muted-foreground: 36 20% 70%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 53%;      /* #888888 */
 
-    --accent: 19 64% 47%;             /* #C4622D terracotta */
-    --accent-foreground: 38 60% 96%;
+    --accent: 50 100% 48%;             /* same yellow accent */
+    --accent-foreground: 0 0% 7%;
 
-    --destructive: 0 70% 45%;
-    --destructive-foreground: 38 60% 96%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 24 25% 20%;
-    --input: 24 25% 20%;
-    --ring: 43 60% 56%;
+    --border: 0 0% 100% / 0.1;         /* not used directly via hsl */
+    --border-solid: 0 0% 18%;
+    --input: 0 0% 7%;
+    --ring: 50 100% 48%;
 
-    --radius: 0.75rem;
+    /* Cream/legacy aliases for backwards compatibility */
+    --cream: 0 0% 100%;
+    --cream-foreground: 0 0% 7%;
 
-    --sidebar-background: 22 60% 7%;
-    --sidebar-foreground: 38 50% 92%;
-    --sidebar-primary: 43 60% 56%;
-    --sidebar-primary-foreground: 22 60% 7%;
-    --sidebar-accent: 24 53% 12%;
-    --sidebar-accent-foreground: 38 50% 92%;
-    --sidebar-border: 24 25% 20%;
-    --sidebar-ring: 43 60% 56%;
+    --whatsapp: 142 70% 49%;           /* #25D366 */
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 50 100% 48%;
+    --sidebar-primary-foreground: 0 0% 7%;
+    --sidebar-accent: 0 0% 13%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 50 100% 48%;
   }
 
-  .dark {
-    /* Same — site is dark by default */
-    --background: 22 60% 7%;
-    --foreground: 38 50% 92%;
-    --card: 22 56% 9%;
-    --card-foreground: 38 50% 92%;
-    --popover: 22 56% 9%;
-    --popover-foreground: 38 50% 92%;
-    --primary: 43 60% 56%;
-    --primary-foreground: 22 60% 7%;
-    --secondary: 24 53% 12%;
-    --secondary-foreground: 38 50% 92%;
-    --muted: 24 30% 18%;
-    --muted-foreground: 36 20% 70%;
-    --accent: 19 64% 47%;
-    --accent-foreground: 38 60% 96%;
-    --destructive: 0 70% 45%;
-    --destructive-foreground: 38 60% 96%;
-    --border: 24 25% 20%;
-    --input: 24 25% 20%;
-    --ring: 43 60% 56%;
-  }
+  .dark { /* same — site is dark by default */ }
 }
 
 @layer base {
-  * { @apply border-border; }
+  * { border-color: hsl(0 0% 100% / 0.1); }
   html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground font-body antialiased;
   }
-  h1, h2, h3, h4, h5 { @apply font-display; }
+  h1, h2, h3, h4, h5 { @apply font-display tracking-tight; }
 }
 
 @layer components {
-  .container-x { @apply max-w-7xl mx-auto px-6 md:px-10; }
-  .section-y { @apply py-24 md:py-32; }
-  .eyebrow { @apply font-accent italic text-primary text-lg md:text-xl tracking-wide; }
-  .display-1 { @apply font-display text-5xl md:text-7xl leading-[1.05] font-medium; }
-  .display-2 { @apply font-display text-4xl md:text-5xl leading-tight font-medium; }
+  .container-x { @apply max-w-[1200px] mx-auto px-6 md:px-10; }
+  .section-y { @apply py-[60px] md:py-[100px]; }
+  .eyebrow { @apply text-xs uppercase tracking-[0.18em] text-muted-foreground; }
 }
 
 /* Reveal on scroll */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(30px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 .reveal.is-visible {
@@ -102,17 +84,24 @@
   transform: translateY(0);
 }
 
-/* WhatsApp pulse ring */
+/* WhatsApp pulse ring (green) */
 @keyframes pulse-ring {
   0% { transform: scale(0.9); opacity: 0.6; }
-  80%, 100% { transform: scale(1.6); opacity: 0; }
+  80%, 100% { transform: scale(1.7); opacity: 0; }
 }
 .pulse-ring::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: hsl(var(--primary) / 0.5);
+  background: hsl(var(--whatsapp) / 0.55);
   animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
   z-index: -1;
 }
+
+/* Hero entrance */
+@keyframes hero-rise {
+  0% { opacity: 0; transform: translateY(60px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.hero-rise { animation: hero-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }

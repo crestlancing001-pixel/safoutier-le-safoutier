@@ -98,17 +98,24 @@ const Contact = () => {
     }
   };
 
-  const errClass = "text-accent text-xs mt-1.5 font-accent italic";
+  const errClass = "text-destructive text-xs mt-1.5 font-medium";
+  const darkInput =
+    "bg-surface2 border-foreground/15 focus-visible:ring-primary focus-visible:border-primary text-foreground placeholder:text-muted-foreground/70 h-12 rounded-md";
 
   return (
     <>
       {/* HERO */}
       <section className="relative h-[40vh] min-h-[300px] -mt-20 w-full overflow-hidden flex items-center justify-center">
         <img src={HERO} alt="Hilton Yaoundé entrance" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/[0.6]" />
+        <div className="absolute inset-0 bg-black/65" />
         <div className="relative z-10 text-center container-x pt-20">
-          <h1 className="font-display text-cream text-5xl md:text-7xl">Get in Touch</h1>
-          <p className="font-accent italic text-primary text-xl md:text-2xl mt-4">
+          <h1
+            className="font-body font-black uppercase text-primary leading-[0.95] tracking-tight"
+            style={{ fontSize: "clamp(2.5rem, 8vw, 5rem)" }}
+          >
+            GET IN TOUCH
+          </h1>
+          <p className="text-foreground/85 text-base md:text-lg mt-4">
             We are here to make your visit extraordinary
           </p>
         </div>
@@ -118,25 +125,25 @@ const Contact = () => {
       <section className="bg-background py-20 md:py-24">
         <div className="container-x grid md:grid-cols-3 gap-6 md:gap-8">
           {/* Phone */}
-          <article className="bg-card border border-primary/30 rounded-xl p-8 reveal">
+          <article className="bg-surface2 border border-foreground/10 rounded-xl p-8 reveal">
             <span className="inline-flex w-12 h-12 rounded-full bg-primary/15 items-center justify-center mb-5">
               <Phone className="w-5 h-5 text-primary" />
             </span>
-            <h3 className="font-display text-2xl text-cream mb-3">Call Us</h3>
-            <div className="space-y-1 text-muted-foreground">
+            <h3 className="text-xl font-bold text-foreground mb-3">Call Us</h3>
+            <div className="space-y-1 text-muted-foreground text-sm">
               <p><a href="tel:+237650002929" className="hover:text-primary">+237 650 002 929</a></p>
               <p><a href="tel:+237222233646" className="hover:text-primary">+237 222 233 646</a></p>
             </div>
           </article>
 
           {/* WhatsApp */}
-          <article className="bg-card border border-primary/30 rounded-xl p-8 reveal">
+          <article className="bg-surface2 border border-foreground/10 rounded-xl p-8 reveal">
             <span className="inline-flex w-12 h-12 rounded-full bg-primary/15 items-center justify-center mb-5">
               <MessageCircle className="w-5 h-5 text-primary" />
             </span>
-            <h3 className="font-display text-2xl text-cream mb-3">Chat with Us</h3>
-            <p className="text-muted-foreground mb-5">+237 681 137 452</p>
-            <Button asChild variant="terracotta" size="sm">
+            <h3 className="text-xl font-bold text-foreground mb-3">Chat with Us</h3>
+            <p className="text-muted-foreground text-sm mb-5">+237 681 137 452</p>
+            <Button asChild size="sm" className="bg-whatsapp text-whatsapp-foreground hover:brightness-110">
               <a href="https://wa.me/237681137452" target="_blank" rel="noopener noreferrer">
                 Open WhatsApp
               </a>
@@ -144,12 +151,12 @@ const Contact = () => {
           </article>
 
           {/* Hours */}
-          <article className="bg-card border border-primary/30 rounded-xl p-8 reveal">
+          <article className="bg-surface2 border border-foreground/10 rounded-xl p-8 reveal">
             <span className="inline-flex w-12 h-12 rounded-full bg-primary/15 items-center justify-center mb-5">
               <Clock className="w-5 h-5 text-primary" />
             </span>
-            <h3 className="font-display text-2xl text-cream mb-3">Opening Hours</h3>
-            <div className="space-y-1 text-muted-foreground">
+            <h3 className="text-xl font-bold text-foreground mb-3">Opening Hours</h3>
+            <div className="space-y-1 text-muted-foreground text-sm">
               <p>Monday–Sunday: 6:30 AM – 11:00 PM</p>
               <p>Sunday Brunch: 12:00 PM – 4:00 PM</p>
             </div>
@@ -157,87 +164,58 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* SECTION 2 — FORM + MAP */}
-      <section className="bg-cream text-cream-foreground py-20 md:py-28">
+      {/* SECTION 2 — FORM + MAP (yellow Find Us section per brief) */}
+      <section className="bg-primary text-primary-foreground py-20 md:py-[100px]">
         <div className="container-x grid lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* LEFT — FORM */}
+          {/* LEFT — DETAILS */}
           <div>
-            <h2 className="font-display text-accent text-4xl md:text-5xl mb-8">Send Us a Message</h2>
-            <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-              <div>
-                <Label htmlFor="name" className="mb-2 inline-block text-cream-foreground">Full Name</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  maxLength={100}
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? "name-error" : undefined}
-                  onBlur={(e) => validateField("name", e.target.value)}
-                  onChange={(e) => errors.name && validateField("name", e.target.value)}
-                  className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground"
-                />
-                {errors.name && <p id="name-error" className={errClass}>{errors.name}</p>}
+            <h2
+              className="font-body font-extrabold mb-8 leading-[1.05]"
+              style={{ fontSize: "clamp(2rem, 4.5vw, 3.25rem)" }}
+            >
+              Find Us
+            </h2>
+
+            <div className="space-y-6 text-base">
+              <div className="flex gap-4">
+                <MapPin className="w-5 h-5 mt-1 shrink-0" />
+                <div>
+                  <p className="font-bold mb-1">Address</p>
+                  <p className="opacity-85">Hilton Yaoundé, Boulevard du 20 Mai<br />Yaoundé, Cameroon</p>
+                </div>
               </div>
-              <div>
-                <Label htmlFor="email" className="mb-2 inline-block text-cream-foreground">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  maxLength={255}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "email-error" : undefined}
-                  onBlur={(e) => validateField("email", e.target.value)}
-                  onChange={(e) => errors.email && validateField("email", e.target.value)}
-                  className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground"
-                />
-                {errors.email && <p id="email-error" className={errClass}>{errors.email}</p>}
+              <div className="flex gap-4">
+                <Phone className="w-5 h-5 mt-1 shrink-0" />
+                <div>
+                  <p className="font-bold mb-1">Phone</p>
+                  <p className="opacity-85"><a href="tel:+237677011785" className="hover:underline">+237 677 011 785</a></p>
+                  <p className="opacity-85"><a href="tel:+237681137452" className="hover:underline">+237 681 137 452</a></p>
+                </div>
               </div>
-              <div>
-                <Label className="mb-2 inline-block text-cream-foreground">Subject</Label>
-                <Select
-                  value={subject}
-                  onValueChange={(v) => {
-                    setSubject(v);
-                    validateField("subject", v);
-                  }}
-                >
-                  <SelectTrigger aria-invalid={!!errors.subject} className="bg-background/5 border-cream-foreground/20 focus:ring-accent text-cream-foreground">
-                    <SelectValue placeholder="Select a subject" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SUBJECTS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-                {errors.subject && <p className={errClass}>{errors.subject}</p>}
+              <div className="flex gap-4">
+                <Clock className="w-5 h-5 mt-1 shrink-0" />
+                <div>
+                  <p className="font-bold mb-1">Hours</p>
+                  <p className="opacity-85">Monday–Sunday: 6:30 AM – 11:00 PM</p>
+                  <p className="opacity-85">Sunday Brunch: 12:00 PM – 4:00 PM</p>
+                </div>
               </div>
-              <div>
-                <Label htmlFor="message" className="mb-2 inline-block text-cream-foreground">Message</Label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  maxLength={2000}
-                  aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? "message-error" : undefined}
-                  onBlur={(e) => validateField("message", e.target.value)}
-                  onChange={(e) => errors.message && validateField("message", e.target.value)}
-                  className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground"
-                />
-                {errors.message && <p id="message-error" className={errClass}>{errors.message}</p>}
-              </div>
-              <Button type="submit" variant="terracotta" size="lg" className="w-full" disabled={isSubmitting || isSuccess} aria-live="polite">
-                {isSuccess ? (
-                  <span className="inline-flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Message Sent</span>
-                ) : isSubmitting ? "Sending…" : "Send Message"}
-              </Button>
-            </form>
+            </div>
+
+            <a
+              href="https://wa.me/237681137452"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pulse-ring relative inline-flex items-center gap-3 mt-10 bg-whatsapp text-whatsapp-foreground px-6 py-3 rounded-full font-bold uppercase tracking-[0.05em] text-sm hover:brightness-110 transition-all"
+            >
+              <MessageCircle className="w-5 h-5" />
+              Chat on WhatsApp
+            </a>
           </div>
 
           {/* RIGHT — MAP */}
           <div>
-            <h2 className="font-display text-accent text-4xl md:text-5xl mb-8">Find Us</h2>
-            <div className="rounded-xl overflow-hidden border border-cream-foreground/15 shadow-sm" style={{ height: 400 }}>
+            <div className="rounded-2xl overflow-hidden border-[3px] border-primary-foreground" style={{ height: 460 }}>
               <iframe
                 title="Hilton Yaoundé location"
                 src="https://www.google.com/maps?q=Hilton+Yaounde,+Boulevard+du+20+Mai,+Yaounde,+Cameroon&output=embed"
@@ -245,14 +223,8 @@ const Contact = () => {
                 loading="lazy"
               />
             </div>
-            <div className="mt-6 flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-accent mt-1 shrink-0" />
-              <p className="text-cream-foreground/80">
-                Hilton Yaoundé, Boulevard du 20 Mai,<br />Yaoundé, Cameroon
-              </p>
-            </div>
             <div className="mt-6">
-              <Button asChild variant="terracotta">
+              <Button asChild variant="dark">
                 <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer">Get Directions</a>
               </Button>
             </div>
@@ -260,10 +232,97 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* SECTION 2b — Send a message form (dark) */}
+      <section className="bg-background py-20 md:py-[100px]">
+        <div className="container-x max-w-3xl mx-auto">
+          <h2
+            className="font-body font-extrabold text-foreground mb-3 leading-[1.05] text-center"
+            style={{ fontSize: "clamp(2rem, 4.5vw, 3rem)" }}
+          >
+            Send Us a Message
+          </h2>
+          <p className="text-muted-foreground text-center mb-10">
+            We'll reply within 24 hours.
+          </p>
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            <div>
+              <Label htmlFor="name" className="text-foreground/90 mb-2 inline-block text-xs uppercase tracking-wider">Full Name</Label>
+              <Input
+                id="name"
+                name="name"
+                maxLength={100}
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? "name-error" : undefined}
+                onBlur={(e) => validateField("name", e.target.value)}
+                onChange={(e) => errors.name && validateField("name", e.target.value)}
+                className={darkInput}
+              />
+              {errors.name && <p id="name-error" className={errClass}>{errors.name}</p>}
+            </div>
+            <div>
+              <Label htmlFor="email" className="text-foreground/90 mb-2 inline-block text-xs uppercase tracking-wider">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                maxLength={255}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
+                onBlur={(e) => validateField("email", e.target.value)}
+                onChange={(e) => errors.email && validateField("email", e.target.value)}
+                className={darkInput}
+              />
+              {errors.email && <p id="email-error" className={errClass}>{errors.email}</p>}
+            </div>
+            <div>
+              <Label className="text-foreground/90 mb-2 inline-block text-xs uppercase tracking-wider">Subject</Label>
+              <Select
+                value={subject}
+                onValueChange={(v) => {
+                  setSubject(v);
+                  validateField("subject", v);
+                }}
+              >
+                <SelectTrigger aria-invalid={!!errors.subject} className={darkInput}>
+                  <SelectValue placeholder="Select a subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SUBJECTS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              {errors.subject && <p className={errClass}>{errors.subject}</p>}
+            </div>
+            <div>
+              <Label htmlFor="message" className="text-foreground/90 mb-2 inline-block text-xs uppercase tracking-wider">Message</Label>
+              <Textarea
+                id="message"
+                name="message"
+                rows={6}
+                maxLength={2000}
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "message-error" : undefined}
+                onBlur={(e) => validateField("message", e.target.value)}
+                onChange={(e) => errors.message && validateField("message", e.target.value)}
+                className={`${darkInput} h-auto`}
+              />
+              {errors.message && <p id="message-error" className={errClass}>{errors.message}</p>}
+            </div>
+            <Button type="submit" size="xl" className="w-full" disabled={isSubmitting || isSuccess} aria-live="polite">
+              {isSuccess ? (
+                <span className="inline-flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Message Sent</span>
+              ) : isSubmitting ? "Sending…" : "Send Message"}
+            </Button>
+          </form>
+        </div>
+      </section>
+
       {/* SECTION 3 — TRIPADVISOR */}
-      <section className="bg-background py-24 md:py-28">
+      <section className="bg-surface2 py-20 md:py-[100px]">
         <div className="container-x text-center max-w-4xl mx-auto">
-          <h2 className="font-display text-primary text-4xl md:text-5xl mb-12">
+          <h2
+            className="font-body font-extrabold text-primary mb-12 leading-[1.05]"
+            style={{ fontSize: "clamp(2rem, 4.5vw, 3rem)" }}
+          >
             We Are Proud to Be Recognized
           </h2>
           <div className="grid md:grid-cols-3 gap-6 mb-10">
@@ -272,30 +331,33 @@ const Contact = () => {
               { icon: Users, label: "341", sub: "Reviews" },
               { icon: Award, label: "#3 of 148", sub: "Restaurants in Yaoundé" },
             ].map(({ icon: Icon, label, sub }) => (
-              <div key={sub} className="bg-card border border-primary/30 rounded-xl p-8">
+              <div key={sub} className="bg-background border border-foreground/10 rounded-xl p-8">
                 <Icon className="w-7 h-7 text-primary mx-auto mb-4" />
-                <p className="font-display text-4xl text-cream">{label}</p>
-                <p className="text-sm uppercase tracking-widest text-muted-foreground mt-2">{sub}</p>
+                <p className="text-3xl font-extrabold text-foreground">{label}</p>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground mt-2">{sub}</p>
               </div>
             ))}
           </div>
           <p className="text-muted-foreground mb-8">
             Travelers' Choice Award Winner · Read our reviews on TripAdvisor
           </p>
-          <Button asChild variant="terracotta" size="lg">
+          <Button asChild size="lg">
             <a href={TRIPADVISOR} target="_blank" rel="noopener noreferrer">Read Our Reviews</a>
           </Button>
         </div>
       </section>
 
       {/* SECTION 4 — FINAL CTA */}
-      <section className="bg-accent text-accent-foreground py-24 md:py-28">
+      <section className="bg-primary text-primary-foreground py-24 md:py-28">
         <div className="container-x text-center max-w-3xl mx-auto">
-          <h2 className="font-display text-4xl md:text-6xl leading-tight">
+          <h2
+            className="font-body font-extrabold leading-tight"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+          >
             Your next great meal is waiting.
           </h2>
           <div className="mt-10">
-            <Button asChild variant="default" size="lg">
+            <Button asChild size="lg" variant="dark">
               <Link to="/reservations">Reserve a Table</Link>
             </Button>
           </div>

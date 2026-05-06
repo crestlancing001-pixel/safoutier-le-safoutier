@@ -8,16 +8,16 @@ export default {
     container: {
       center: true,
       padding: "1.5rem",
-      screens: { "2xl": "1400px" },
+      screens: { "2xl": "1200px" },
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', "serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
-        accent: ['"Cormorant Garamond"', "serif"],
+        display: ['"Space Grotesk"', "system-ui", "sans-serif"],
+        body: ['Inter', "system-ui", "sans-serif"],
+        accent: ['"Space Grotesk"', "system-ui", "sans-serif"],
       },
       colors: {
-        border: "hsl(var(--border))",
+        border: "hsl(var(--border-solid))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -56,6 +56,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        whatsapp: {
+          DEFAULT: "hsl(var(--whatsapp))",
+          foreground: "#FFFFFF",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -83,13 +87,13 @@ export default {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
-        "leaf-out": {
-          "0%": { opacity: "1", transform: "scale(1)" },
-          "100%": { opacity: "0", transform: "scale(1.1)" },
+        "fade-out": {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
         },
         "bounce-soft": {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(10px)" },
+          "50%": { transform: "translateY(8px)" },
         },
         "marquee": {
           "0%": { transform: "translateX(0)" },
@@ -101,7 +105,7 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-up": "fade-up 0.6s ease-out both",
         "fade-in": "fade-in 0.5s ease-out both",
-        "leaf-out": "leaf-out 0.6s ease-out 1.2s forwards",
+        "fade-out": "fade-out 0.5s ease-out both",
         "bounce-soft": "bounce-soft 2s ease-in-out infinite",
         "marquee": "marquee 40s linear infinite",
       },
