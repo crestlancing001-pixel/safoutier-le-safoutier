@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Phone, MessageCircle, Clock, MapPin, Star, Award, Users } from "lucide-react";
+import { Phone, MessageCircle, Clock, MapPin, Star, Award, Users, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,6 +42,7 @@ const Contact = () => {
   const [subject, setSubject] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const validateField = (field: string, value: unknown) => {
     const partial = { name: "", email: "", subject: "", message: "", [field]: value };
@@ -86,6 +87,12 @@ const Contact = () => {
       toast.success("Message received. We will reply within 24 hours.");
       form.reset();
       setSubject("");
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        const first = form.querySelector<HTMLElement>('[name="name"]');
+        first?.focus();
+      }, 2200);
     } finally {
       setIsSubmitting(false);
     }
@@ -219,8 +226,10 @@ const Contact = () => {
                 />
                 {errors.message && <p id="message-error" className={errClass}>{errors.message}</p>}
               </div>
-              <Button type="submit" variant="terracotta" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Sending…" : "Send Message"}
+              <Button type="submit" variant="terracotta" size="lg" className="w-full" disabled={isSubmitting || isSuccess} aria-live="polite">
+                {isSuccess ? (
+                  <span className="inline-flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Message Sent</span>
+                ) : isSubmitting ? "Sending…" : "Send Message"}
               </Button>
             </form>
           </div>
