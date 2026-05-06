@@ -41,10 +41,27 @@ const schema = z.object({
 const Contact = () => {
   const [subject, setSubject] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const validateField = (field: string, value: unknown) => {
+    const partial = { name: "", email: "", subject: "", message: "", [field]: value };
+    const result = schema.safeParse(partial);
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      if (!result.success) {
+        const issue = result.error.issues.find((i) => i.path[0] === field);
+        if (issue) next[field] = issue.message;
+      }
+      return next;
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    if (isSubmitting) return;
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const result = schema.safeParse({
       name: fd.get("name"),
       email: fd.get("email"),
@@ -55,12 +72,23 @@ const Contact = () => {
       const flat: Record<string, string> = {};
       result.error.issues.forEach((i) => (flat[i.path[0] as string] = i.message));
       setErrors(flat);
+      const firstKey = result.error.issues[0]?.path[0] as string | undefined;
+      if (firstKey) {
+        const el = form.querySelector<HTMLElement>(`[name="${firstKey}"]`);
+        el?.focus();
+      }
       return;
     }
     setErrors({});
-    toast.success("Message received. We will reply within 24 hours.");
-    (e.target as HTMLFormElement).reset();
-    setSubject("");
+    setIsSubmitting(true);
+    try {
+      await new Promise((r) => setTimeout(r, 800));
+      toast.success("Message received. We will reply within 24 hours.");
+      form.reset();
+      setSubject("");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const errClass = "text-accent text-xs mt-1.5 font-accent italic";
