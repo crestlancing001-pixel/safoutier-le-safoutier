@@ -1,270 +1,295 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { LeafDivider } from "@/components/SafouLeaf";
-import { Star, Award, ChevronDown, Utensils, Music, Waves, Sun } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const HERO = "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2000&q=80";
-const STORY_IMG = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=85";
-const TERRACE = "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=85";
-const BRUNCH = "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=1600&q=85";
+
+const aboutPhotos = [
+  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=85",
+];
 
 const dishes = [
   {
-    name: "Ndolé Royal",
-    desc: "Bitterleaf stew with prawns, crayfish & beef.",
+    name: "Ndole au Crevettes",
+    desc: "Cameroon's beloved bitter leaf stew with prawns, groundnuts and plantain",
     img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=85",
   },
   {
-    name: "Poulet DG",
-    desc: "Pan-seared chicken with sweet plantains & vegetables.",
-    img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=85",
+    name: "Barracuda Grillé",
+    desc: "Fresh-catch barracuda marinated in local herbs and flame grilled",
+    img: "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=85",
   },
   {
-    name: "Grilled Sea Bass",
-    desc: "Whole fish with safou butter & herb rice.",
-    img: "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=900&q=85",
+    name: "Riz Jollof Spécial",
+    desc: "Fragrant West African tomato rice with grilled chicken and fried plantain",
+    img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=85",
   },
 ];
 
-const reviews = [
-  { text: "Exceptional buffet. The variety of Cameroonian dishes alongside international options was remarkable. Best meal in Yaoundé.", name: "James A." },
-  { text: "Sunday brunch with live music and pool access — absolutely magical. The staff treated us like royalty.", name: "Sophie M." },
-  { text: "The Ndolé was the best I have ever tasted. The ambiance inside the Hilton is world-class.", name: "Pierre K." },
-  { text: "Highly recommend for business dinners. Quiet, elegant, and the food quality is unmatched in Cameroon.", name: "Amara D." },
+const carouselImages = [
+  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=85",
 ];
+
+const avatars = Array.from({ length: 11 }, (_, i) =>
+  `https://i.pravatar.cc/80?img=${i + 5}`,
+);
+
+const stats = [
+  { value: 341, suffix: "+", label: "Satisfied Guests" },
+  { value: 20, suffix: "+", label: "Menu Items" },
+  { value: 4.7, suffix: "★", label: "TripAdvisor Rating", decimals: 1 },
+];
+
+const useCountUp = (target: number, decimals = 0, duration = 1400) => {
+  const [val, setVal] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const start = performance.now();
+          const tick = (now: number) => {
+            const p = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            setVal(target * eased);
+            if (p < 1) requestAnimationFrame(tick);
+            else setVal(target);
+          };
+          requestAnimationFrame(tick);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target, duration]);
+  return { ref, display: val.toFixed(decimals) };
+};
+
+const Stat = ({ value, suffix, label, decimals = 0 }: { value: number; suffix: string; label: string; decimals?: number }) => {
+  const { ref, display } = useCountUp(value, decimals);
+  return (
+    <div ref={ref} className="text-center px-6">
+      <p className="font-body text-3xl md:text-4xl font-extrabold text-primary-foreground">
+        {display}
+        {suffix}
+      </p>
+      <p className="text-sm md:text-base font-medium text-primary-foreground/75 mt-1">{label}</p>
+    </div>
+  );
+};
+
+const Carousel = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const scroll = (dir: -1 | 1) => {
+    ref.current?.scrollBy({ left: dir * 360, behavior: "smooth" });
+  };
+  return (
+    <div className="relative">
+      <div
+        ref={ref}
+        className="flex gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {carouselImages.map((src, i) => (
+          <div key={i} className="shrink-0 w-[280px] md:w-[340px] aspect-[4/5] rounded-xl overflow-hidden">
+            <img src={src} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={() => scroll(-1)}
+        aria-label="Previous"
+        className="absolute -left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-primary-foreground text-foreground flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={() => scroll(1)}
+        aria-label="Next"
+        className="absolute -right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-primary-foreground text-foreground flex items-center justify-center hover:scale-105 transition-transform shadow-lg"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+};
 
 const Home = () => {
   return (
     <>
-      {/* SECTION 1 — HERO */}
-      <section className="relative h-screen min-h-[640px] -mt-20 w-full overflow-hidden flex items-center justify-center">
+      {/* HERO */}
+      <section className="relative h-screen min-h-[600px] -mt-20 w-full overflow-hidden">
         <img src={HERO} alt="Le Safoutier signature plate" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/[0.55]" />
-        <div className="relative z-10 container-x text-center max-w-4xl">
-          <p className="font-accent italic text-primary text-lg md:text-xl uppercase tracking-[0.25em] mb-6 animate-fade-up">
-            Hilton Yaoundé, Cameroon
-          </p>
+        <div className="absolute inset-0 bg-black/55" />
+
+        <div className="relative z-10 h-full container-x flex items-center justify-center pt-20">
           <h1
-            className="font-display font-medium text-cream leading-[1.05] animate-fade-up"
-            style={{ fontSize: "clamp(2.625rem, 6vw, 4.5rem)", animationDelay: "0.1s" }}
+            className="hero-rise font-body font-black uppercase text-primary leading-[0.9] text-center tracking-tight"
+            style={{ fontSize: "clamp(3.75rem, 14vw, 8.5rem)" }}
           >
-            Where Cameroon Meets the World
+            LE SAFOUTIER
           </h1>
-          <p className="mt-6 text-base md:text-lg font-light text-cream/85 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            Authentic flavors. Refined ambiance. Unforgettable moments.
-          </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
-            <Button asChild variant="terracotta" size="lg">
-              <Link to="/reservations">Reserve a Table</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              className="bg-transparent border border-cream/70 text-cream hover:bg-cream hover:text-cream-foreground"
+        </div>
+
+        {/* Bottom-left pills */}
+        <div className="absolute bottom-8 left-6 md:bottom-10 md:left-10 z-10 space-y-2 hero-rise" style={{ animationDelay: "0.3s" }}>
+          {[
+            ["MON – SAT", "06:30 – 23:00"],
+            ["SUNDAY BRUNCH", "12:00 – 16:00"],
+          ].map(([k, v]) => (
+            <div
+              key={k}
+              className="bg-black/70 border border-white/10 rounded-md px-5 py-3 text-foreground text-[13px] font-medium tracking-wide flex gap-4"
             >
-              <Link to="/menu">Explore Our Menu</Link>
-            </Button>
-          </div>
-        </div>
-
-        {/* Awards strip */}
-        <div className="absolute bottom-16 md:bottom-20 left-0 right-0 z-10">
-          <div className="mx-auto max-w-5xl bg-background/60 backdrop-blur-sm border-y border-primary/20">
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 py-4 px-6 text-sm text-cream/90">
-              <span className="flex items-center gap-2">
-                <Star className="w-4 h-4 fill-primary text-primary" />
-                <span className="font-display text-lg text-primary">4.7</span>
-                <span className="text-cream/70">TripAdvisor</span>
-              </span>
-              <span className="hidden md:inline text-primary/40">·</span>
-              <span>#3 of 148 restaurants in Yaoundé</span>
-              <span className="hidden md:inline text-primary/40">·</span>
-              <span className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-primary" />
-                Travelers' Choice Award
-              </span>
+              <span className="font-bold">{k}</span>
+              <span className="text-foreground/85">{v}</span>
             </div>
-          </div>
+          ))}
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 animate-bounce-soft">
-          <ChevronDown className="w-6 h-6 text-cream/70" />
-        </div>
+        {/* Bottom-right tagline */}
+        <p
+          className="absolute bottom-10 right-6 md:right-10 z-10 text-foreground text-sm leading-relaxed max-w-[220px] hero-rise hidden sm:block"
+          style={{ animationDelay: "0.4s" }}
+        >
+          Experience the rich flavors of Cameroonian tradition and passion in every dish.
+        </p>
       </section>
 
-      {/* SECTION 2 — STORY */}
-      <section className="bg-cream text-cream-foreground py-24 md:py-32">
-        <div className="container-x grid md:grid-cols-12 gap-12 md:gap-16 items-center">
-          <div className="md:col-span-7 reveal">
-            <p className="font-accent italic text-accent/80 text-lg mb-6 uppercase tracking-[0.2em]">Our Origin</p>
-            <blockquote className="font-display text-accent text-3xl md:text-5xl leading-[1.15] font-medium">
-              "Named after the safou — the wild African plum that thrives in Cameroonian forests.
-              <span className="block mt-3 italic font-accent text-accent/90">A fruit of richness. A symbol of our table.</span>"
-            </blockquote>
-            <div className="mt-10 h-px w-24 bg-accent/30" />
-            <p className="mt-6 text-cream-foreground/70 max-w-md leading-relaxed">
-              Within the Hilton Yaoundé, our chefs honor this heritage through plates that
-              draw from local terroir and the wider world.
+      {/* ABOUT / WELCOME — yellow */}
+      <section className="bg-primary text-primary-foreground py-[60px] md:py-[100px]">
+        <div className="container-x">
+          <div className="grid grid-cols-3 gap-3 md:gap-5 mb-12 reveal overflow-x-auto md:overflow-visible">
+            {aboutPhotos.map((src, i) => (
+              <div key={i} className="rounded-xl overflow-hidden shadow-lg" style={{ height: 180 }}>
+                <img src={src} alt="" className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+
+          <div className="max-w-[700px] mx-auto text-center reveal">
+            <p className="text-base md:text-lg font-semibold leading-[1.7]">
+              Welcome to Le Safoutier, your destination for authentic Cameroonian cuisine inside the prestigious Hilton Yaoundé.
+              Enjoy a culinary journey with dishes like savory Ndole and delightful Jollof Rice. Join us for a memorable dining
+              experience where African tradition meets world-class taste.
             </p>
           </div>
-          <div className="md:col-span-5 reveal relative">
-            <div className="aspect-[2/3] overflow-hidden rounded-xl shadow-2xl">
-              <img src={STORY_IMG} alt="Le Safoutier interior" className="w-full h-full object-cover" />
-            </div>
-            {/* Floating award badge */}
-            <div className="absolute -bottom-6 -left-6 md:-left-10 bg-background text-cream rounded-xl shadow-2xl p-5 w-56 border border-primary/30">
-              <div className="flex items-center gap-2 mb-2">
-                <Award className="w-5 h-5 text-primary" />
-                <span className="text-xs uppercase tracking-widest text-primary">TripAdvisor</span>
-              </div>
-              <p className="font-display text-2xl">4.7 ★</p>
-              <p className="text-xs text-cream/70 mt-1">Travelers' Choice · 341 reviews</p>
-            </div>
+
+          <div className="mt-12 pt-10 border-t border-primary-foreground/20 grid grid-cols-3 max-w-3xl mx-auto divide-x divide-primary-foreground/15 reveal">
+            {stats.map((s) => (
+              <Stat key={s.label} {...s} />
+            ))}
           </div>
         </div>
-        <div className="mt-24"><LeafDivider /></div>
       </section>
 
-      {/* SECTION 3 — FEATURED DISHES */}
-      <section className="bg-background py-24 md:py-32">
+      {/* MENU PREVIEW — dark */}
+      <section className="bg-surface2 text-foreground py-[60px] md:py-[100px]">
         <div className="container-x">
-          <div className="text-center max-w-2xl mx-auto mb-16 reveal">
-            <p className="eyebrow mb-3">Signature Flavours</p>
-            <h2 className="font-display text-primary text-4xl md:text-5xl font-medium">
-              Crafted with intention.
-            </h2>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 reveal">
+            <div>
+              <h2 className="font-body font-extrabold text-foreground leading-[1.05]" style={{ fontSize: "clamp(2.25rem, 5vw, 3.25rem)" }}>
+                Indulge in our<br />Exquisite Favorites
+              </h2>
+              <p className="mt-4 text-muted-foreground max-w-md">
+                Discover a symphony of Cameroonian and international tastes with our handpicked favorites
+              </p>
+            </div>
+            <Button asChild>
+              <Link to="/reservations">Book Online</Link>
+            </Button>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {dishes.map((d, i) => (
-              <article
-                key={d.name}
-                className="reveal group bg-card rounded-xl overflow-hidden transition-transform duration-500 hover:scale-[1.03]"
-                style={{ transitionDelay: `${i * 80}ms` }}
-              >
-                <div className="aspect-[4/5] overflow-hidden" style={{ height: "60%" }}>
+              <article key={d.name} className="reveal group" style={{ transitionDelay: `${i * 80}ms` }}>
+                <div className="rounded-xl overflow-hidden mb-5" style={{ height: 280 }}>
                   <img
                     src={d.img}
                     alt={d.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 className="font-display text-2xl text-cream mb-2">{d.name}</h3>
-                  <p className="font-light text-muted-foreground text-sm leading-relaxed">{d.desc}</p>
-                </div>
+                <h3 className="text-[22px] font-bold text-foreground mb-2">{d.name}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{d.desc}</p>
               </article>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* SECTION 4 — EXPERIENCE */}
-      <section className="bg-background pb-24 md:pb-32">
-        <div className="container-x space-y-20 md:space-y-28">
-          {/* Block A */}
-          <div className="grid md:grid-cols-100 md:[grid-template-columns:55fr_45fr] gap-10 md:gap-16 items-center reveal">
-            <div className="aspect-[4/3] overflow-hidden rounded-xl">
-              <img src={TERRACE} alt="Restaurant terrace" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <p className="eyebrow mb-3">The Setting</p>
-              <h3 className="font-display text-4xl md:text-5xl text-cream mb-8">A Table with a View</h3>
-              <ul className="space-y-5">
-                <li className="flex items-start gap-4">
-                  <span className="mt-1 w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                    <Utensils className="w-4 h-4 text-primary" />
-                  </span>
-                  <span className="text-muted-foreground">Refined ambiance with warm, intimate lighting</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="mt-1 w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                    <Music className="w-4 h-4 text-primary" />
-                  </span>
-                  <span className="text-muted-foreground">Live acoustic music every Sunday</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="mt-1 w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                    <Waves className="w-4 h-4 text-primary" />
-                  </span>
-                  <span className="text-muted-foreground">Direct poolside access for guests</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Block B — alternated */}
-          <div className="grid md:[grid-template-columns:45fr_55fr] gap-10 md:gap-16 items-center reveal">
-            <div className="md:order-1 order-2">
-              <p className="eyebrow mb-3">Every Sunday</p>
-              <h3 className="font-display text-4xl md:text-5xl text-cream mb-6">The Sunday Brunch</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                A celebrated tradition at Le Safoutier — Sundays from 12:00 PM to 4:00 PM bring
-                together a lavish spread of Cameroonian and international dishes, accompanied
-                by live music and full poolside access.
-              </p>
-              <ul className="space-y-3 text-sm text-muted-foreground">
-                <li className="flex items-center gap-3"><Sun className="w-4 h-4 text-primary" /> 12:00 PM – 4:00 PM</li>
-                <li className="flex items-center gap-3"><Music className="w-4 h-4 text-primary" /> Live music throughout</li>
-                <li className="flex items-center gap-3"><Waves className="w-4 h-4 text-primary" /> Pool access included</li>
-              </ul>
-              <div className="mt-8">
-                <Button asChild variant="terracotta"><Link to="/reservations">Book Sunday Brunch</Link></Button>
-              </div>
-            </div>
-            <div className="md:order-2 order-1 aspect-[4/3] overflow-hidden rounded-xl">
-              <img src={BRUNCH} alt="Sunday brunch buffet" className="w-full h-full object-cover" />
-            </div>
+          <div className="mt-14 text-center reveal">
+            <Button asChild size="lg">
+              <Link to="/menu">View Full Menu</Link>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* SECTION 5 — TESTIMONIALS */}
-      <section className="bg-cream text-cream-foreground py-24 md:py-32 overflow-hidden">
-        <div className="container-x text-center mb-14 reveal">
-          <p className="font-accent italic text-accent text-lg mb-3 uppercase tracking-[0.2em]">Guest Voices</p>
-          <h2 className="font-display text-cream-foreground text-4xl md:text-5xl">What Our Guests Say</h2>
-        </div>
-        <div className="relative">
-          <div className="flex gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
-            {[...reviews, ...reviews].map((r, i) => (
-              <article
-                key={i}
-                className="w-[340px] md:w-[420px] bg-background/[0.04] border border-accent/15 rounded-xl p-8 shadow-sm shrink-0"
-              >
-                <div className="flex gap-1 mb-5">
-                  {[...Array(5)].map((_, k) => (
-                    <Star key={k} className="w-4 h-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="font-accent italic text-xl md:text-2xl leading-snug text-cream-foreground/90">
-                  "{r.text}"
-                </p>
-                <div className="mt-6 pt-5 border-t border-accent/15">
-                  <p className="font-display text-lg text-accent">{r.name}</p>
-                  <p className="text-xs uppercase tracking-widest text-cream-foreground/50 mt-1">via TripAdvisor</p>
-                </div>
-              </article>
-            ))}
+      {/* TESTIMONIALS — yellow */}
+      <section className="bg-primary text-primary-foreground py-[60px] md:py-[100px]">
+        <div className="container-x">
+          <div className="max-w-[750px] mx-auto text-center reveal">
+            <p className="font-display text-6xl md:text-7xl text-primary-foreground/40 leading-none mb-2">"</p>
+            <blockquote
+              className="text-xl md:text-2xl font-semibold italic leading-[1.6]"
+            >
+              Le Safoutier offers an incredible taste of Cameroon! The Ndole and Sunday Brunch were outstanding,
+              and every dish was made with authentic flavors. Highly recommend!
+            </blockquote>
+            <p className="mt-6 text-base font-medium">
+              Marcelle L. — Yaoundé, November 2023
+            </p>
+
+            <div className="mt-8 flex justify-center reveal">
+              {avatars.map((a, i) => (
+                <img
+                  key={i}
+                  src={a}
+                  alt=""
+                  className="w-10 h-10 rounded-full border-2 border-primary object-cover"
+                  style={{ marginLeft: i === 0 ? 0 : -8 }}
+                />
+              ))}
+            </div>
           </div>
+
+          <div className="mt-20 mb-10 reveal">
+            <h2 className="font-body font-extrabold text-primary-foreground leading-[1.05]" style={{ fontSize: "clamp(2rem, 4.5vw, 3rem)" }}>
+              Discover the Flavors<br />Behind Our Menu
+            </h2>
+            <p className="mt-4 text-primary-foreground/75 max-w-xl">
+              A glimpse into our kitchen, our space, and the dishes our guests love most.
+            </p>
+          </div>
+
+          <Carousel />
         </div>
       </section>
 
-      {/* SECTION 6 — CTA BANNER */}
-      <section className="bg-accent text-accent-foreground py-24 md:py-32">
+      {/* CTA BANNER — dark with yellow text */}
+      <section className="bg-surface2 text-foreground py-[60px] md:py-[100px]">
         <div className="container-x text-center max-w-3xl mx-auto reveal">
-          <h2 className="font-display text-4xl md:text-6xl leading-tight">
-            Ready for an Unforgettable Dining Experience?
+          <h2
+            className="font-body font-extrabold text-foreground leading-tight"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)" }}
+          >
+            Ready for an Unforgettable<br />Dining Experience?
           </h2>
-          <p className="mt-6 text-lg text-accent-foreground/85">
+          <p className="mt-5 text-muted-foreground text-lg">
             Join us Monday through Sunday, 6:30 AM to 11:00 PM
           </p>
           <div className="mt-10">
-            <Button
-              asChild
-              size="lg"
-              className="bg-cream text-cream-foreground hover:bg-cream/90"
-            >
+            <Button asChild size="lg">
               <Link to="/reservations">Make a Reservation</Link>
             </Button>
           </div>

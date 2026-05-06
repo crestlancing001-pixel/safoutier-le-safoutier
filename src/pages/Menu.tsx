@@ -91,26 +91,31 @@ const Menu = () => {
       {/* HERO */}
       <section className="relative h-[50vh] min-h-[360px] -mt-20 w-full overflow-hidden flex items-center justify-center">
         <img src={HERO} alt="Le Safoutier buffet spread" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/[0.6]" />
+        <div className="absolute inset-0 bg-black/65" />
         <div className="relative z-10 text-center container-x pt-20">
-          <h1 className="font-display text-cream text-5xl md:text-7xl">Our Menu</h1>
-          <p className="font-accent italic text-primary text-xl md:text-2xl mt-4">
+          <h1
+            className="font-body font-black uppercase text-primary leading-[0.95] tracking-tight"
+            style={{ fontSize: "clamp(2.75rem, 9vw, 5.5rem)" }}
+          >
+            OUR MENU
+          </h1>
+          <p className="text-foreground/85 text-base md:text-lg mt-4 max-w-xl mx-auto">
             A celebration of Cameroonian and international cuisine
           </p>
         </div>
       </section>
 
       {/* TAB NAV */}
-      <section className="bg-background py-12 md:py-16 sticky top-20 z-30 border-b border-border/40 backdrop-blur-sm bg-background/95">
+      <section className="bg-surface2 py-8 sticky top-20 z-30 border-b border-foreground/10">
         <div className="container-x flex flex-wrap justify-center gap-3">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setActive(t.key)}
-              className={`px-5 md:px-6 py-2.5 rounded-full text-sm uppercase tracking-wider transition-all border ${
+              className={`px-5 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold uppercase tracking-[0.05em] transition-all border ${
                 active === t.key
                   ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-transparent text-primary border-primary/40 hover:border-primary hover:bg-primary/10"
+                  : "bg-transparent text-foreground/85 border-foreground/20 hover:border-primary hover:text-primary"
               }`}
             >
               {t.label}
@@ -122,41 +127,35 @@ const Menu = () => {
       {/* GRID */}
       <section className="bg-background py-16 md:py-24">
         <div className="container-x">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {current.items.map((item) => (
               <article
                 key={item.name}
-                className="group bg-card rounded-xl overflow-hidden border border-border/40 transition-transform duration-500 hover:scale-[1.02] animate-fade-up"
+                className="group animate-fade-up"
               >
-                <div className="aspect-video overflow-hidden">
+                <div className="rounded-xl overflow-hidden mb-5" style={{ height: 280 }}>
                   <img
                     src={item.img}
                     alt={item.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-6">
-                  <span className="inline-block bg-accent text-accent-foreground text-[10px] uppercase tracking-widest px-3 py-1 rounded-full mb-4">
-                    {current.badge}
-                  </span>
-                  <h3 className="font-display text-2xl text-cream mb-2">{item.name}</h3>
-                  <p className="font-light text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
-                </div>
+                <h3 className="text-[22px] font-bold text-foreground mb-2">{item.name}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{item.desc}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CREAM BANNER */}
-      <section className="bg-cream text-cream-foreground py-16 md:py-20">
+      {/* YELLOW BANNER */}
+      <section className="bg-primary text-primary-foreground py-16 md:py-20">
         <div className="container-x text-center max-w-3xl mx-auto">
-          <p className="font-accent italic text-2xl md:text-3xl text-accent leading-snug">
-            All menus are subject to seasonal availability. Our chef sources fresh ingredients
-            daily from Yaoundé's local markets.
+          <p className="text-xl md:text-2xl font-semibold leading-snug">
+            All menus are subject to seasonal availability. Our chef sources fresh ingredients daily from Yaoundé's local markets.
           </p>
           <div className="mt-8">
-            <Button asChild variant="terracotta" size="lg">
+            <Button asChild variant="dark" size="lg">
               <Link to="/reservations">Make a Reservation</Link>
             </Button>
           </div>
