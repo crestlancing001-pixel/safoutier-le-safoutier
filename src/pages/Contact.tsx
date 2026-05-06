@@ -159,18 +159,43 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
               <div>
                 <Label htmlFor="name" className="mb-2 inline-block text-cream-foreground">Full Name</Label>
-                <Input id="name" name="name" maxLength={100} className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground" />
-                {errors.name && <p className={errClass}>{errors.name}</p>}
+                <Input
+                  id="name"
+                  name="name"
+                  maxLength={100}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "name-error" : undefined}
+                  onBlur={(e) => validateField("name", e.target.value)}
+                  onChange={(e) => errors.name && validateField("name", e.target.value)}
+                  className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground"
+                />
+                {errors.name && <p id="name-error" className={errClass}>{errors.name}</p>}
               </div>
               <div>
                 <Label htmlFor="email" className="mb-2 inline-block text-cream-foreground">Email</Label>
-                <Input id="email" name="email" type="email" maxLength={255} className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground" />
-                {errors.email && <p className={errClass}>{errors.email}</p>}
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  maxLength={255}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                  onBlur={(e) => validateField("email", e.target.value)}
+                  onChange={(e) => errors.email && validateField("email", e.target.value)}
+                  className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground"
+                />
+                {errors.email && <p id="email-error" className={errClass}>{errors.email}</p>}
               </div>
               <div>
                 <Label className="mb-2 inline-block text-cream-foreground">Subject</Label>
-                <Select value={subject} onValueChange={setSubject}>
-                  <SelectTrigger className="bg-background/5 border-cream-foreground/20 focus:ring-accent text-cream-foreground">
+                <Select
+                  value={subject}
+                  onValueChange={(v) => {
+                    setSubject(v);
+                    validateField("subject", v);
+                  }}
+                >
+                  <SelectTrigger aria-invalid={!!errors.subject} className="bg-background/5 border-cream-foreground/20 focus:ring-accent text-cream-foreground">
                     <SelectValue placeholder="Select a subject" />
                   </SelectTrigger>
                   <SelectContent>
@@ -181,11 +206,21 @@ const Contact = () => {
               </div>
               <div>
                 <Label htmlFor="message" className="mb-2 inline-block text-cream-foreground">Message</Label>
-                <Textarea id="message" name="message" rows={5} maxLength={2000} className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground" />
-                {errors.message && <p className={errClass}>{errors.message}</p>}
+                <Textarea
+                  id="message"
+                  name="message"
+                  rows={5}
+                  maxLength={2000}
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? "message-error" : undefined}
+                  onBlur={(e) => validateField("message", e.target.value)}
+                  onChange={(e) => errors.message && validateField("message", e.target.value)}
+                  className="bg-background/5 border-cream-foreground/20 focus-visible:ring-accent text-cream-foreground"
+                />
+                {errors.message && <p id="message-error" className={errClass}>{errors.message}</p>}
               </div>
-              <Button type="submit" variant="terracotta" size="lg" className="w-full">
-                Send Message
+              <Button type="submit" variant="terracotta" size="lg" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Sending…" : "Send Message"}
               </Button>
             </form>
           </div>
