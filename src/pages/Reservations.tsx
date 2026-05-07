@@ -64,7 +64,7 @@ const Reservations = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const result = schema.safeParse({
@@ -86,6 +86,18 @@ const Reservations = () => {
       return;
     }
     setErrors({});
+    const v = result.data;
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { error } = await supabase.from("reservations").insert({
+      full_name: v.name, email: v.email, phone: v.phone,
+      date: v.date.toISOString().slice(0, 10), time: v.time,
+      guests: v.guests, occasion: v.occasion,
+      special_requests: v.requests || null, status: "pending",
+    });
+    if (error) {
+      toast.error("Could not submit reservation. Please try again or call us.");
+      return;
+    }
     toast.success("Thank you! We will confirm your reservation within 2 hours.");
     (e.target as HTMLFormElement).reset();
     setDate(undefined);
