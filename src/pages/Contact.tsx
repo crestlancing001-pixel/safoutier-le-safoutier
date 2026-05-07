@@ -170,9 +170,7 @@ const useContactInfo = () => {
 const Contact = () => {
   const { contact, heroImg, loading } = useContactInfo();
   const [subject, setSubject] = useState("");
-  const [errors, setErrors] = useState
-    Record<string, string>
-  >({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -331,7 +329,7 @@ const Contact = () => {
             <div className="space-y-1 
             text-muted-foreground text-sm">
               <p>
-                
+                <a
                   href={`tel:${contact.phone1.replace(/\s/g, "")}`}
                   className="hover:text-primary"
                 >
@@ -345,7 +343,7 @@ const Contact = () => {
                 </a>
               </p>
               <p>
-                
+                <a
                   href={`tel:${contact.phone2.replace(/\s/g, "")}`}
                   className="hover:text-primary"
                 >
@@ -390,7 +388,7 @@ const Contact = () => {
               className="bg-whatsapp text-whatsapp-foreground 
               hover:brightness-110"
             >
-              
+              <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -476,7 +474,7 @@ const Contact = () => {
                 <div>
                   <p className="font-bold mb-1">Phone</p>
                   <p className="opacity-85">
-                    
+                    <a
                       href={`tel:${contact.phone1.replace(/\s/g, "")}`}
                       className="hover:underline"
                     >
@@ -484,7 +482,7 @@ const Contact = () => {
                     </a>
                   </p>
                   <p className="opacity-85">
-                    
+                    <a
                       href={`tel:${contact.phone2.replace(/\s/g, "")}`}
                       className="hover:underline"
                     >
@@ -508,7 +506,7 @@ const Contact = () => {
               </div>
             </div>
 
-            
+            <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -540,7 +538,7 @@ const Contact = () => {
             </div>
             <div className="mt-6">
               <Button asChild variant="dark">
-                
+                <a
                   href={MAPS_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -790,7 +788,7 @@ const Contact = () => {
             reviews on TripAdvisor
           </p>
           <Button asChild size="lg">
-            
+            <a
               href={TRIPADVISOR}
               target="_blank"
               rel="noopener noreferrer"

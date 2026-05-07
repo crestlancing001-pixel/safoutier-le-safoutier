@@ -117,10 +117,7 @@ const FALLBACK_ITEMS: Item[] = [
   },
 ];
 
-const CATEGORY_META: Record
-  string,
-  { label: string; badge: string }
-> = {
+const CATEGORY_META: Record<string, { label: string; badge: string }> = {
   breakfast: { label: "Breakfast", badge: "Breakfast" },
   lunch: { label: "Lunch", badge: "Lunch" },
   dinner: { label: "Dinner", badge: "Dinner" },
