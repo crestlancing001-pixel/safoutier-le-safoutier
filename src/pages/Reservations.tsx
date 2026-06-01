@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useContactInfo } from "@/hooks/useSupabase";
 
 const HERO =
   "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2000&q=80";
@@ -56,6 +57,16 @@ const schema = z.object({
 });
 
 const Reservations = () => {
+  const { data: contact } = useContactInfo();
+  const phone1 = contact?.phone1 || "+237 677 011 785";
+  const phone2 = contact?.phone2 || "+237 681 137 452";
+  const whatsapp = contact?.whatsapp || "+237 681 137 452";
+  const address = contact?.address || "Hilton Yaoundé, Boulevard du 20 Mai\nYaoundé, Cameroon";
+  const hours = contact?.hours || "Mon–Sun: 6:30 AM – 11:00 PM\nSunday Brunch: 12:00 PM – 4:00 PM";
+  const mapUrl = contact?.map_url || "https://www.google.com/maps?q=Hilton+Yaounde,+Boulevard+du+20+Mai,+Yaounde,+Cameroon&output=embed";
+  const telHref = (p: string) => `tel:${p.replace(/[^+\d]/g, "")}`;
+  const waHref = `https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`;
+
   const [date, setDate] = useState<Date | undefined>();
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState("");
@@ -240,7 +251,7 @@ const Reservations = () => {
                 Confirm Reservation
               </Button>
               <p className="text-center text-sm text-muted-foreground">
-                Or call us directly at <a href="tel:+237650002929" className="text-primary hover:underline">+237 650 002 929</a>
+                Or call us directly at <a href={telHref(phone1)} className="text-primary hover:underline">{phone1}</a>
               </p>
             </form>
           </div>
@@ -252,8 +263,9 @@ const Reservations = () => {
                 <Clock className="w-5 h-5 text-primary mt-1 shrink-0" />
                 <div>
                   <h3 className="text-lg font-bold text-foreground mb-1.5">Opening Hours</h3>
-                  <p className="text-sm text-muted-foreground">Mon–Sun: 6:30 AM – 11:00 PM</p>
-                  <p className="text-sm text-muted-foreground">Sunday Brunch: 12:00 PM – 4:00 PM</p>
+                  {hours.split("\n").map((line, i) => (
+                    <p key={i} className="text-sm text-muted-foreground">{line}</p>
+                  ))}
                 </div>
               </div>
               <div className="h-px bg-foreground/10" />
@@ -261,9 +273,7 @@ const Reservations = () => {
                 <MapPin className="w-5 h-5 text-primary mt-1 shrink-0" />
                 <div>
                   <h3 className="text-lg font-bold text-foreground mb-1.5">Find Us</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Hilton Yaoundé, Boulevard du 20 Mai<br />Yaoundé, Cameroon
-                  </p>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">{address}</p>
                 </div>
               </div>
               <div className="h-px bg-foreground/10" />
@@ -271,8 +281,8 @@ const Reservations = () => {
                 <Phone className="w-5 h-5 text-primary mt-1 shrink-0" />
                 <div>
                   <h3 className="text-lg font-bold text-foreground mb-1.5">Call Us</h3>
-                  <p className="text-sm"><a href="tel:+237677011785" className="text-muted-foreground hover:text-primary">+237 677 011 785</a></p>
-                  <p className="text-sm"><a href="tel:+237681137452" className="text-muted-foreground hover:text-primary">+237 681 137 452</a></p>
+                  <p className="text-sm"><a href={telHref(phone1)} className="text-muted-foreground hover:text-primary">{phone1}</a></p>
+                  {phone2 && <p className="text-sm"><a href={telHref(phone2)} className="text-muted-foreground hover:text-primary">{phone2}</a></p>}
                 </div>
               </div>
               <div className="h-px bg-foreground/10" />
@@ -281,7 +291,7 @@ const Reservations = () => {
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-foreground mb-2">WhatsApp</h3>
                   <Button asChild size="sm" className="bg-whatsapp text-whatsapp-foreground hover:brightness-110">
-                    <a href="https://wa.me/237681137452" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+                    <a href={waHref} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
                   </Button>
                 </div>
               </div>
@@ -289,8 +299,8 @@ const Reservations = () => {
 
             <div className="aspect-[4/3] rounded-xl overflow-hidden border-[3px] border-primary-foreground">
               <iframe
-                title="Hilton Yaoundé location"
-                src="https://www.google.com/maps?q=Hilton+Yaounde,+Boulevard+du+20+Mai,+Yaounde,+Cameroon&output=embed"
+                title="Restaurant location"
+                src={mapUrl}
                 className="w-full h-full"
                 loading="lazy"
               />
