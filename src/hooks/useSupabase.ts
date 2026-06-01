@@ -6,6 +6,8 @@ import type { Database } from '@/integrations/supabase/types';
 type MenuItem = Database['public']['Tables']['menu_items']['Row'];
 type SiteImage = Database['public']['Tables']['site_images']['Row'];
 type ContactInfo = Database['public']['Tables']['contact_info']['Row'];
+type Event = Database['public']['Tables']['events']['Row'];
+type Testimonial = Database['public']['Tables']['testimonials']['Row'];
 
 export function useMenuItems() {
   return useQuery({
@@ -16,7 +18,6 @@ export function useMenuItems() {
         .select('*')
         .order('category')
         .order('sort_order', { ascending: true });
-
       if (error) throw error;
       return data as MenuItem[];
     },
@@ -31,7 +32,6 @@ export function useSiteImages() {
         .from('site_images')
         .select('*')
         .order('name');
-
       if (error) throw error;
       return data as SiteImage[];
     },
@@ -45,59 +45,70 @@ export function useContactInfo() {
       const { data, error } = await supabase
         .from('contact_info')
         .select('*')
-        .single();   // assuming one main row
-
-      if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+        .limit(1)
+        .maybeSingle();
+      if (error && error.code !== 'PGRST116') throw error;
       return data as ContactInfo | null;
     },
   });
 }
 
-// Real-time subscriptions
+export function useEvents() {
+  return useQuery({
+    queryKey: ['events'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data as Event[];
+    },
+  });
+}
+
+export function useTestimonials() {
+  return useQuery({
+    queryKey: ['testimonials'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('testimonials')
+        .select('*')
+        .eq('is_visible', true)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data as Testimonial[];
+    },
+  });
+}
+
+// Single global realtime subscription for all public-facing tables.
+// Mount once (e.g. in Layout) — invalidates react-query caches on any change.
 export function useRealtimeUpdates() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    // Menu items realtime
-    const menuChannel = supabase
-      .channel('menu-realtime')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'menu_items' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['menu_items'] });
-        }
-      )
-      .subscribe();
+    const tables: Array<{ table: string; key: string }> = [
+      { table: 'menu_items', key: 'menu_items' },
+      { table: 'site_images', key: 'site_images' },
+      { table: 'contact_info', key: 'contact_info' },
+      { table: 'events', key: 'events' },
+      { table: 'testimonials', key: 'testimonials' },
+    ];
 
-    // Images realtime
-    const imagesChannel = supabase
-      .channel('images-realtime')
-      .on(
+    const channel = supabase.channel('public-realtime');
+    tables.forEach(({ table, key }) => {
+      channel.on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'site_images' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['site_images'] });
-        }
-      )
-      .subscribe();
-
-    // Contact realtime
-    const contactChannel = supabase
-      .channel('contact-realtime')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'contact_info' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['contact_info'] });
-        }
-      )
-      .subscribe();
+        { event: '*', schema: 'public', table },
+        () => queryClient.invalidateQueries({ queryKey: [key] })
+      );
+    });
+    channel.subscribe();
 
     return () => {
-      supabase.removeChannel(menuChannel);
-      supabase.removeChannel(imagesChannel);
-      supabase.removeChannel(contactChannel);
+      supabase.removeChannel(channel);
     };
   }, [queryClient]);
 }

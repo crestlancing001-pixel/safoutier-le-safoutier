@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { LeafDivider } from "@/components/SafouLeaf";
 import { useMenuItems, useRealtimeUpdates } from "@/hooks/useSupabase";
 
